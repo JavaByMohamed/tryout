@@ -1,0 +1,23 @@
+# Node
+node_modules/
+
+# Capacitor / Android build output
+android/.gradle/
+android/build/
+android/app/build/
+
+# Local machine config
+android/local.properties
+
+# Release signing secrets
+android/keystore.properties
+*.jks
+*.keystore
+
+# IDE / local editor state
+.idea/
+android/.idea/
+*.iml
+
+# macOS
+.DS_Store
