@@ -27,3 +27,17 @@ calorieCounter/
 │   ├── dropdownMenu.js       // Handles the dropdown menu functionality
 │   └── main.js               // Initializes the app and imports other scripts
 
+## GitHub Pages proxy setup
+
+When deployed to GitHub Pages, local `http://localhost:8081` proxy calls will not work.
+
+1. Deploy your proxy (see `fatsecret-proxy/README.md`).
+2. Open `script/runtimeConfig.js`.
+3. Set:
+
+```javascript
+window.CALORIE_COUNTER_PROXY_URL = "https://your-proxy-name.workers.dev";
+```
+
+If left empty, the app uses localhost during local development and falls back to Open Food Facts for store search in production.
+

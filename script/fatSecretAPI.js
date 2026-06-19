@@ -16,14 +16,29 @@
 // ============================================================
 // CONFIGURATION — Set your FatSecret API credentials here
 // ============================================================
+function getProxyBaseUrl() {
+  const runtimeProxy = (typeof window !== "undefined" && window.CALORIE_COUNTER_PROXY_URL)
+    ? window.CALORIE_COUNTER_PROXY_URL.trim().replace(/\/+$/, "")
+    : "";
+
+  if (runtimeProxy) return runtimeProxy;
+
+  if (typeof window !== "undefined") {
+    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (isLocal) return "http://localhost:8081";
+  }
+
+  return "";
+}
+
 const FATSECRET_CONFIG = {
-  clientId: "375c33984a444db6860873f8237f0094",
-  clientSecret: "8c4f122ee0dd481d83cd9955be4ae7f1",
+  clientId: "",
+  clientSecret: "",
 
   // Proxy URL — FatSecret doesn't allow direct browser calls (CORS).
   // Option A: Use the Cloudflare Worker proxy (see fatsecret-proxy/ folder)
   // Option B: Set to "" to try direct calls (only works in non-browser environments)
-  proxyUrl: "http://localhost:8081",  // Local proxy (run: npm run proxy)
+  proxyUrl: getProxyBaseUrl(),
 };
 
 // ============================================================

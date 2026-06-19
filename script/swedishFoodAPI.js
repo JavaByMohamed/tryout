@@ -6,6 +6,21 @@
 
 const API_BASE = "https://dataportal.livsmedelsverket.se/livsmedel/api/v1";
 
+function getProxyBaseUrl() {
+  const runtimeProxy = (typeof window !== "undefined" && window.CALORIE_COUNTER_PROXY_URL)
+    ? window.CALORIE_COUNTER_PROXY_URL.trim().replace(/\/+$/, "")
+    : "";
+
+  if (runtimeProxy) return runtimeProxy;
+
+  if (typeof window !== "undefined") {
+    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (isLocal) return "http://localhost:8081";
+  }
+
+  return "";
+}
+
 // Cache all food items since the API doesn't support server-side text search
 let cachedFoods = null;
 let cachePromise = null;
@@ -152,7 +167,7 @@ async function getNutritionByNameSearch(name) {
  * Search Willys.se for grocery products, then enrich with Open Food Facts nutrition.
  * Returns products actually sold at Willys/Hemköp with real prices and nutrition.
  *
- * ⚠️ Willys blocks CORS, so requests go through the local proxy (localhost:8081/willys).
+ * ⚠️ Willys blocks CORS, so requests go through a proxy endpoint (/willys).
  *
  * @param {string} query - Search term in Swedish (e.g. "kycklingbröst eldorado")
  * @returns {Promise<Array>} - Array of products with nutrition info (per 100g)
@@ -160,8 +175,14 @@ async function getNutritionByNameSearch(name) {
 export async function searchSwedishStoreProducts(query) {
   if (!query || query.trim().length < 2) return [];
 
-  // Route through local proxy to avoid CORS block
-  const proxyUrl = `http://localhost:8081/willys?q=${encodeURIComponent(query.trim())}`;
+  const proxyBaseUrl = getProxyBaseUrl();
+  if (!proxyBaseUrl) {
+    console.warn("[Store Search] No proxy configured; falling back to Open Food Facts.");
+    return searchOpenFoodFactsFallback(query);
+  }
+
+  // Route through proxy to avoid CORS block
+  const proxyUrl = `${proxyBaseUrl}/willys?q=${encodeURIComponent(query.trim())}`;
 
   try {
     console.log("[Store Search] Willys via proxy:", proxyUrl);
