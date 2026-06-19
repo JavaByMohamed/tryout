@@ -1103,6 +1103,24 @@ footer {
   color: #555;
 }
 
+.edit-meal-notice {
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #eaf4ff;
+  border: 1px solid #b6d8ff;
+  color: #1f5f99;
+  font-weight: 600;
+}
+
+.edit-amount {
+  min-width: 110px;
+  padding: 10px 0px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: right;
+}
+
 /* ==================== INLINE MEAL EDITOR ==================== */
 .saved-meal-card.editing {
   border: 2px solid #2ecc71;
@@ -2288,6 +2306,22 @@ table {
 }
 .reuse-meal-btn:hover {
   background: #2980b9;
+}
+
+.edit-meal-btn {
+  background: #f39c12;
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  margin-right: 5px;
+  transition: background 0.2s;
+}
+
+.edit-meal-btn:hover {
+  background: #d68910;
 }
 
 /* ✏️ Inline workout edit fields */
